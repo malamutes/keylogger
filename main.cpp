@@ -92,6 +92,11 @@ int main()
 
     CGMouseButton MouseButtonPress = kCGMouseButtonLeft;
 
+    CGEventType MouseEventType = kCGEventMouseMoved;
+    CGEventType MouseEventTypeUp = kCGEventMouseMoved;
+    bool click = false;
+    bool isDragDown = false;
+
     if (!AXIsProcessTrusted())
     {
         std::cout << "WARNING: No Accessibility Permissions!" << std::endl;
@@ -103,7 +108,7 @@ int main()
         std::cout << "SUCCESS: Accessibility Permissions granted." << std::endl;
     }
 
-    char buffer[1024] = {0};
+    char buffer[32] = {0};
     while (!exitLoop)
     {
         memset(buffer, 0, sizeof(buffer));
@@ -129,20 +134,63 @@ int main()
 
         if (std::strstr(buffer, "LEFT") != nullptr)
         {
+            click = true;
             MouseButtonPress = kCGMouseButtonLeft;
+            MouseEventType = kCGEventLeftMouseDown;
+            MouseEventTypeUp = kCGEventLeftMouseUp;
         }
         else if (std::strstr(buffer, "RIGHT") != nullptr)
         {
+            click = true;
             MouseButtonPress = kCGMouseButtonRight;
+            MouseEventType = kCGEventRightMouseDown;
+            MouseEventTypeUp = kCGEventRightMouseUp;
         }
-        // else is for numbers i guess
+        else if (std::strstr(buffer, "DRAG_UP") != nullptr)
+        {
+            if (isDragDown)
+            {
+                isDragDown = false;
+                click = false;
+                MouseButtonPress = kCGMouseButtonLeft;
+                MouseEventTypeUp = kCGEventLeftMouseUp;
+                MouseEventType = kCGEventMouseMoved;
+
+                CGEventRef MouseEventReleaseDrag = CGEventCreateMouseEvent(
+                    NULL,
+                    MouseEventTypeUp,
+                    NewMousePosition,
+                    MouseButtonPress);
+                CGEventPost(kCGHIDEventTap, MouseEventReleaseDrag);
+                CFRelease(MouseEventReleaseDrag);
+            }
+        }
+        // simulating dragging where i need to let go
+        else if (std::strstr(buffer, "DRAG_DOWN") != nullptr)
+        {
+            isDragDown = true;
+            click = false;
+            MouseButtonPress = kCGMouseButtonLeft;
+            MouseEventType = kCGEventLeftMouseDown;
+        }
+        // else is for numbers i guess, for moving, has state for regular moving or dragging and moving
         else
         {
+            click = false;
             std::istringstream iss(buffer);
 
             std::string line;
             std::string moveCommand;
             double dx = 0, dy = 0;
+            if (isDragDown)
+            {
+                MouseEventType = kCGEventLeftMouseDragged;
+            }
+            else
+            {
+                MouseEventType = kCGEventMouseMoved;
+            }
+
             while (iss >> moveCommand >> dx >> dy)
             {
                 std::cout << "COMMAND: " << moveCommand << ", DX: " << dx << ", DY: " << dy << std::endl;
@@ -156,7 +204,7 @@ int main()
 
         CGEventRef MouseEventCreated = CGEventCreateMouseEvent(
             NULL,
-            kCGEventMouseMoved,
+            MouseEventType,
             NewMousePosition,
             MouseButtonPress);
 
@@ -169,6 +217,20 @@ int main()
         std::cout << "Attempting to post event..." << std::endl;
         CGEventPost(kCGHIDEventTap, MouseEventCreated);
         std::cout << "Post successful!" << std::endl;
+
+        // if click then need to do a mirror event which will lift mouse button up at the end
+        // and free everything
+        if (click)
+        {
+            CGEventRef MouseEventCreatedLiftUp = CGEventCreateMouseEvent(
+                NULL,
+                MouseEventTypeUp,
+                NewMousePosition,
+                MouseButtonPress);
+            CGEventPost(kCGHIDEventTap, MouseEventCreatedLiftUp);
+            CFRelease(MouseEventCreatedLiftUp);
+        }
+
         CFRelease(MouseEventCreated);
     }
 

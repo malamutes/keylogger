@@ -43,6 +43,14 @@ class MainActivity : AppCompatActivity() {
             sendCommand("RIGHT")
         }
 
+        findViewById<Button>(R.id.dragUpButton).setOnClickListener {
+            sendCommand("DRAG_UP")
+        }
+
+        findViewById<Button>(R.id.dragDownButton).setOnClickListener {
+            sendCommand("DRAG_DOWN")
+        }
+
         findViewById<Button>(R.id.quitButton).setOnClickListener {
             sendCommand("QUIT")
         }

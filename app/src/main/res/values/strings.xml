@@ -3,6 +3,8 @@
     <string name="app_name">Remote Touchpad</string>
     <string name="touchpad_hint">Drag anywhere on screen to move cursor</string>
     <string name="connect_button">CONNECT 8080</string>
+    <string name="drag_up_button">DRAG_UP</string>
+    <string name="drag_down_button">DRAG_DOWN</string>
     <string name="left_button">LEFT</string>
     <string name="right_button">RIGHT</string>
     <string name="quit_button">QUIT</string>

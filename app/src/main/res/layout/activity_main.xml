@@ -34,6 +34,28 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/dragUpButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/drag_up_button" />
+
+            <Button
+                android:id="@+id/dragDownButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/drag_down_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
                 android:id="@+id/leftButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
