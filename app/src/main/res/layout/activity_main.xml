@@ -6,13 +6,6 @@
     android:background="#101820"
     android:padding="24dp">
 
-    <Button
-        android:id="@+id/connectButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center_horizontal"
-        android:text="@string/connect_button" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,19 +27,19 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/dragUpButton"
+                android:id="@+id/scrollUpArea"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="@string/drag_up_button" />
+                android:text="@string/scroll_up_area" />
 
             <Button
-                android:id="@+id/dragDownButton"
+                android:id="@+id/scrollDownArea"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/drag_down_button" />
+                android:text="@string/scroll_down_area" />
         </LinearLayout>
 
         <LinearLayout
@@ -54,29 +47,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
-
             <Button
-                android:id="@+id/leftButton"
-                android:layout_width="0dp"
+                android:id="@+id/quitButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@string/left_button" />
-
-            <Button
-                android:id="@+id/rightButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/right_button" />
+                android:text="@string/quit_button" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/quitButton"
+            android:id="@+id/connectButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/quit_button" />
+            android:text="@string/connect_button" />
     </LinearLayout>
 
 </FrameLayout>

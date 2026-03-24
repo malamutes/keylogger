@@ -14,8 +14,11 @@
 #include <sstream>
 #include <ApplicationServices/ApplicationServices.h>
 
-const int CF_RUN_LOOP_INTERVAL = 300;
+const uint16 CF_RUN_LOOP_INTERVAL = 300;
 const char *quit_string = "QUIT";
+const float SENSITIVITY = 0.75;
+const int32_t SCROLL_UNIT = 5;
+const uint32_t WHEELCOUNT = 1;
 
 CGEventRef LoggingKeystrokesCallback(
     CGEventTapProxy CGEventTapProxy,
@@ -96,6 +99,7 @@ int main()
     CGEventType MouseEventTypeUp = kCGEventMouseMoved;
     bool click = false;
     bool isDragDown = false;
+    bool isScrolling = false;
 
     if (!AXIsProcessTrusted())
     {
@@ -173,6 +177,40 @@ int main()
             MouseButtonPress = kCGMouseButtonLeft;
             MouseEventType = kCGEventLeftMouseDown;
         }
+        else if (std::strstr(buffer, "SCROLL_UP") != nullptr)
+        {
+            isDragDown = false;
+            click = false;
+            isScrolling = true;
+            MouseButtonPress = kCGMouseButtonLeft;
+            MouseEventType = kCGEventMouseMoved;
+
+            CGEventRef MouseScrollUp = CGEventCreateScrollWheelEvent(
+                NULL,
+                kCGScrollEventUnitLine,
+                WHEELCOUNT, // wheelcount, number of scrolling devices, just one
+                SCROLL_UNIT);
+
+            CGEventPost(kCGHIDEventTap, MouseScrollUp);
+            CFRelease(MouseScrollUp);
+        }
+        else if (std::strstr(buffer, "SCROLL_DOWN") != nullptr)
+        {
+            isDragDown = false;
+            click = false;
+            isScrolling = true;
+            MouseButtonPress = kCGMouseButtonLeft;
+            MouseEventType = kCGEventMouseMoved;
+
+            CGEventRef MouseScrollDown = CGEventCreateScrollWheelEvent(
+                NULL,
+                kCGScrollEventUnitLine,
+                WHEELCOUNT, // wheelcount, number of scrolling devices, just one
+                -1 * SCROLL_UNIT);
+
+            CGEventPost(kCGHIDEventTap, MouseScrollDown);
+            CFRelease(MouseScrollDown);
+        }
         // else is for numbers i guess, for moving, has state for regular moving or dragging and moving
         else
         {
@@ -197,8 +235,8 @@ int main()
             }
 
             NewMousePosition = {
-                currentMousePosition.x + dx,
-                currentMousePosition.y + dy,
+                currentMousePosition.x + dx * SENSITIVITY,
+                currentMousePosition.y + dy * SENSITIVITY,
             };
         }
 

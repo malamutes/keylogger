@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Remote Touchpad</string>
-    <string name="touchpad_hint">Drag anywhere on screen to move cursor</string>
+    <string name="touchpad_hint">Tap left/right to click. Double-tap left to hold drag. Hold SCROLL areas to scroll.</string>
     <string name="connect_button">CONNECT 8080</string>
-    <string name="drag_up_button">DRAG_UP</string>
-    <string name="drag_down_button">DRAG_DOWN</string>
-    <string name="left_button">LEFT</string>
-    <string name="right_button">RIGHT</string>
+    <string name="scroll_up_area">SCROLL_UP</string>
+    <string name="scroll_down_area">SCROLL_DOWN</string>
     <string name="quit_button">QUIT</string>
 </resources>
